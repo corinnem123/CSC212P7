@@ -55,5 +55,23 @@ public class TestSorting {
 		Assert.assertTrue(checkSorted(sortMe));
 	}
 
+	@Test
+	public void testSelectionSort() {
+		ArrayList<Integer> sortMe = new ArrayList<>();
+		for (int y : data) {
+			sortMe.add(y);
+		}
+		BubbleSort.selectionSort(sortMe);
+		Assert.assertTrue(checkSorted(sortMe));	
+	}
+	
+	@Test
+	public void testInsertionSort() {
+		ArrayList<Integer> sortMe = new ArrayList<Integer>();
+		sortMe.addAll(Arrays.asList(35, 88, 11, 47, 14, 24, 41, 62, 27));
+		System.out.println(sortMe);
+		BubbleSort.insertionSort(sortMe);
+		Assert.assertTrue(checkSorted(sortMe));
+	}
 
 }
