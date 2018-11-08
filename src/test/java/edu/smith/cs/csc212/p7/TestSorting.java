@@ -69,7 +69,6 @@ public class TestSorting {
 	public void testInsertionSort() {
 		ArrayList<Integer> sortMe = new ArrayList<Integer>();
 		sortMe.addAll(Arrays.asList(35, 88, 11, 47, 14, 24, 41, 62, 27));
-		//System.out.println(sortMe);
 		BubbleSort.insertionSort(sortMe);
 		Assert.assertTrue(checkSorted(sortMe));
 	}
@@ -84,14 +83,14 @@ public class TestSorting {
 		Assert.assertTrue(checkSorted(sortMe));
 	}
 	
-	/*@Test
+	@Test
 	public void testRecursiveMergeSort() {
 		ArrayList<Integer> sortMe = new ArrayList<>();
-		for (int y : data) {
-			sortMe.add(y);
-		}
-		BubbleSort.recursiveMergeSort(sortMe, 0, sortMe.get(sortMe.size()-1));
-		Assert.assertTrue(checkSorted(sortMe));
-	}*/
+		sortMe.addAll(Arrays.asList(35, 88, 11, 47, 14, 24, 41, 62, 27));
+		Collections.shuffle(sortMe);
+		//BubbleSort.recursiveMergeSort(sortMe, 0, sortMe.get(sortMe.size()-1));
+		BubbleSort.recursiveMergeSort(sortMe);
+		//Assert.assertTrue(checkSorted(sortMe));
+	}
 
 }

@@ -63,7 +63,7 @@ public class BubbleSort {
 				int smallest = input.get(0);
 				
 				//if you find a smaller item, put the previous smallest
-				//in the first, move everything down one, and keep checking the list
+				//in the first, automatically move everything down one, and keep checking the list
 				if (input.get(i) < smallest) {
 					swap(input, i, i-1);
 					sorted = false;
@@ -87,7 +87,6 @@ public class BubbleSort {
 	 * https://www.geeksforgeeks.org/insertion-sort/
 	 */
 	public static void insertionSort(List<Integer> input) {
-		System.out.println("input = "+input);
 		int N = input.size();
 		
 		while(true) {
@@ -151,6 +150,7 @@ public class BubbleSort {
 	 * 
 	 * Had help from: drozdek, and geeksforgeeks.com
 	 * https://www.geeksforgeeks.org/merge-sort/
+	 * 
 	 */
 	public static void mergeSort(List<Integer> input) {
 		
@@ -258,39 +258,152 @@ public class BubbleSort {
 
 	}
 
-	/*public static void recursiveMergeSort(List<Integer> input, Integer p, Integer r) {
+	/*
+	 * Take a list passed in, split it in half, and call self until the passed list is 1 or 0 values long.
+	 * Take the mini lists and mergeSort them repeatedly until you've built the list back up to
+	 * its original length.
+	 * 
+	 * I got help from: Drozdeck, Geeks for Geeks, and Barb during lab.
+	 * https://www.geeksforgeeks.org/merge-sort/
+	 */
+	public static void recursiveMergeSort(List<Integer> input) {		
+		//base case: len(array) = 0 or 1
+		//split input into two arrays
+		//pass the arrays back to themselves so you can get it down to 0 or 1 in length
+		//call MergeSort to sort them back out again
+		//return sorted list
 		
-		//take input
-		//if input.size() > 2, /2 until it's just two
-		//if input.size() == 2, compare the two and swap as necessary
-		//if input.size < 2, already sorted
-		
-		System.out.println(input);
-		System.out.println("p = "+p);
-		System.out.println("r = "+r);
-		//if p<r, there are at least 2 items in the list
-		if (p < r) {
-			
-			System.out.println("did it"+p+", "+r);
-			
-			//find the midpoint, split the list along it, and try again
-			int q = p+r/2;
-			System.out.println("q = "+q);
-			recursiveMergeSort(input,p,q);
-			recursiveMergeSort(input,q+1,r);
-			
-			//merge sorted halves
-			recursiveMergeCall(input,p,q,r);
-			
-		} /*else if (p == r) {
-			//this means it's sorted! There's one thing its done its good
+		//base Case:
+		if (input.size() == 1 || input.size() == 0) {
 			return;
+		}
+		
+		//split the passed list in half
+		ArrayList<Integer> One = new ArrayList<>(input.subList(0, input.size()/2));
+		ArrayList<Integer> Two = new ArrayList<>(input.subList(input.size()/2, input.size()));
+
+		//pass the two halves back to merge sort,
+		//eventually getting them down to the base case
+		recursiveMergeSort(One);
+		recursiveMergeSort(Two);
+		
+		//merge sort the split lists back into a bigger, better, sorted list
+		recursiveMergeCall2(One, Two);
+	}
+
+	/*
+	 * A version of mergeSort that takes two lists
+	 * so that I can use it in recursion
+	 * 
+	 * I mostly just copy-pasted my mergeSort but also got help from Barb in lab
+	 * who suggested I just pass a version of mergeSort two lists
+	 */
+	public static void recursiveMergeCall2(List<Integer> input, List<Integer> input2) {
+		System.out.println("called");
+		System.out.println(input);
+		System.out.println(input2);
+		
+		//find sizes of two subarrays to be merged
+		int n1 = input.size();
+		int n2 = input2.size();
+		
+		/*sort the sub arrays into new lists*/
+		
+		//1
+		ArrayList<Integer> Ls = new ArrayList<>(n1);
+		for (int l = 0; l <n1; l++) {
+			Ls.add(0);
+		}
+		
+		for (int i = 0; i < n1; i++) {
+			if (input.get(i) < Ls.get(Ls.size()-i-1)) {
+				Ls.set(Ls.size()-i-1, input.get(i));
 			}
 		}
-
-
-	public static void recursiveMergeCall(List<Integer> input, int p, int q, int r) {
 		
+		System.out.println("Ls = "+Ls);
+		
+		//2
+		ArrayList<Integer> Rs = new ArrayList<>(input2.size());
+		for (int l = 0; l < n2; l++) {
+			Rs.add(0);
+		}
+		
+		for (int i = 0; i < n2; i++) {
+			if (input2.get(i) > Rs.get(Rs.size()-i-1)) {
+				Rs.set(Rs.size()-i-1, input2.get(i));
+			}
+		}
+		System.out.println("Rs = "+Rs);
+		
+		//merge the sorted arrays!!
+		
+		int i = 0;
+		int j = 0;
+		int length = Ls.size() + Rs.size();
+		System.out.print("ordered size: "+length);
+ 		
+		ArrayList<Integer> ordered = new ArrayList<>();
+		for (int c = 0; c<length; c++) {
+			ordered.add(0);
+		}
+		System.out.print("initial ordered: "+ordered);
+		
+		
+		//Loop through both sorted arrays, 
+		//adding their data to the new, bigger list
+		int k = 0;
+		System.out.print("k= "+k);
+		while (i < n1 && j < n2) {
+			
+			System.out.print("Ls= "+Ls.get(i));
+			System.out.print("Rs= "+Rs.get(j));
+			
+			//if the item in Ls is bigger, add that to the sorted list
+			if(Ls.get(i) <= Rs.get(j)) {
+				ordered.set(k, Ls.get(i));
+				i++;
+			} else if (Ls.get(i)>= Rs.get(j)) {
+				ordered.set(k, Rs.get(j));
+				j++;
+			} 
+			
+			k++;
+		}
+		System.out.println("ordered1 = "+ordered);
+		
+		//sort in any values that have been missed
+		//(for example, length differences)
+		while (i < n1) {
+			/*int focus = Ls.get(i);
+			for (int c=0; c < ordered.size();) {
+				if (Ls.get(c) < ordered.get(c)) {
+					ordered.set(i-1, Ls.get(c));
+				}
+			}*/
+			ordered.set(k, Ls.get(i));
+			i++;
+			k++;
+		}
+		
+		while (j < n2) {
+			ordered.set(k, Rs.get(j));
+			j++;
+			k++;
+		}
+		
+		/*//overwright the original list with the new sorted merged list
+		System.out.println("ordered = "+ordered);
+		for (int f = 0; f < ordered.size(); f++) {
+			input.set(f, ordered.get(f));
+			System.out.println("input = "+input);
+		}*/
+		System.out.println("Final: "+ordered);
+
+	}
+
+	/*public static void recursiveMergeCall(List<Integer> input, int p, int q, int r) {
+		System.out.println("called");
 		//find sizes of two subarrays to be merged
 		int n1 = q - p + 1;
 		int n2 = r - q;
@@ -307,8 +420,10 @@ public class BubbleSort {
 		for (int j=0; j<n2; j++) {
 			R[j] = input.get(q + j + 1);
 		}
+		*/
 		/*sort the sub arrays into new lists*/
-		/*
+		
+	/*
 		//L
 		ArrayList<Integer> Ls = new ArrayList<>(L.length);
 		for (int l = 0; l < L.length; l++) {
@@ -334,35 +449,36 @@ public class BubbleSort {
 				Rs.set(R.length-i-1, R[i]);
 			}
 		}
-		System.out.println("Rs = "+Rs);*/
+		System.out.println("Rs = "+Rs);
 		
 		//merge the arrays!!
 		
 		int i = 0;
 		int j = 0;
-		/*int length = Ls.size() + Rs.size();
+		int length = Ls.size() + Rs.size();
+		System.out.print("ordered size: "+length);
  		
 		ArrayList<Integer> ordered = new ArrayList<>();
 		for (int c = 0; c<length; c++) {
 			ordered.add(0);
-		}*/
-		/*
+		}
+		System.out.print("initial ordered: "+ordered);
+		
+		
 		//Loop through both sorted arrays, 
 		//adding their data to the new list
 		int k = p;
+		System.out.print("k= "+k);
 		while (i < n1 && j < n2) {
-			/*if(Ls.get(i) <= Rs.get(j)) {
+			
+			System.out.print("Ls= "+Ls.get(i));
+			System.out.print("Rs= "+Rs.get(j));
+			//if the item in Ls is bigger, add that to the sorted list
+			if(Ls.get(i) <= Rs.get(j)) {
 				ordered.set(k, Ls.get(i));
 				i++;
 			} else {
 				ordered.set(k, Rs.get(j));
-				j++;
-			}*/
-			/*
-			if(L[i] <= R[j]) {
-				input.set(k, L[i]);
-			} else {
-				input.set(k, R[j]);
 				j++;
 			}
 			
@@ -370,25 +486,23 @@ public class BubbleSort {
 		}
 		//System.out.println("ordered1 = "+ordered);
 		while (i < n1) {
-			//ordered.set(k, Ls.get(i));
-			input.set(k, L[i]);
+			ordered.set(k, Ls.get(i));
 			i++;
 			k++;
 		}
 		
 		while (j < n2) {
-			//ordered.set(k, Rs.get(j));
-			input.set(k, R[j]);
+			ordered.set(k, Rs.get(j));
 			j++;
 			k++;
 		}
-		*/
+		
 		//overwright the original list with the new sorted merged list
-		/*System.out.println("ordered = "+ordered);
+		System.out.println("ordered = "+ordered);
 		for (int f = 0; f < ordered.size(); f++) {
 			input.set(f, ordered.get(f));
 			System.out.println("input = "+input);
-		}*/
+		}
 
-	//}
+	}*/
 }
