@@ -83,86 +83,174 @@ public class BubbleSort {
 	/*
 	 * sort the list by comparing the focus data point to each value
 	 * in the list before it
+	 * I got help from Drozdek ch9 and Geeksforgeeks
+	 * https://www.geeksforgeeks.org/insertion-sort/
 	 */
 	public static void insertionSort(List<Integer> input) {
+		/*
+		 * Why does it replace everything with 88???
+		 */
 		
 		int N = input.size();
 		ArrayList<Integer> ordered = new ArrayList<Integer>(input.size());
-		System.out.println(ordered);
+		//System.out.println(ordered);
 		
 		while(true) {
 			boolean sorted = true;
 			
-			for (int i=0; i<N; i++) {
-				//check each item one at a time starting with the first item
-				int focus = input.get(i);
-				System.out.println("focus = "+focus);
+			for (int i=1; i<N; i++) {
+				/*int j = i;
 				
-				if (i == 0) {
-					ordered.add(focus);
-					System.out.println(input+"\n"+ordered);
-					sorted = false;
-				}
-				
-				System.out.println("current: "+ordered.get(i));
-				System.out.println("i: "+i);
-				if (input.get(i) < ordered.get(i-1)) {
-					ordered.add(focus);
-					System.out.println(ordered);
-					sorted = false;
-					
-				} else if (input.get(i) > ordered.get(i-1)) {
-					ordered.add(focus);
-					System.out.println(ordered);
-					sorted = false;
-							
-				} else if (input.get(i) == ordered.get(i-1)) {
-					System.out.println("Here");;
-					
-				} else {
-					System.out.println("what the ever loving fuck");
-				}
-				
-				
-				/*
-				//set up a loop for all the items before it
-				for (int k = i+1; k >= 0; k--) {
-					int current = input.get(k);
-					System.out.println("current = "+current);
-					
-					//if the thing you're evaluating =/= the thing you're comparing to,
-					//do something
-					if (k == i) {
-						k--;
-					}
-					
-					if (current != focus && k != i) {
-						if (current < focus) {
-							if (k > i) {
-								swap(input, k, i);
-								System.out.println(input+"<- modified");
-							}
-						} else if (current > focus) {
-							if (k < i) {
-								swap(input, k, i);
-							}
-						}
-					} else if (current == focus){
-						System.out.print("Current "+current+" and Focus "+focus+" are equal \n");
-					} else {
-						System.out.println("Something is wrong! Current: "+current+" Focus: "+focus+" i: "+i+" k: "+k);
-					}
-				}*/
-			}
+				Comparable<Integer> tmp = (Comparable)input.get(i);
+				for (j = i; j > 0 && tmp.compareTo(input.get(j-1))<0; j--)
+						input.set(j, input.get(j-1));
+				tmp = input.get(j);
+				System.out.println(input+"<- modified");
+			}*/
 			
+			//check each item one at a time starting with the first item
+			int focus = input.get(i);
+			int k = i-1;
+			int current = input.get(k);
+			
+			//System.out.println("focus = "+focus);
+			
+			//set up a loop for all the items before it
+			while (k >= 0 && current > focus) {
+				//System.out.println("current = "+current);
+				
+				//if the thing you're evaluating =/= the thing you're comparing to,
+				//do something
+				input.set(k+1, current);
+				k --;
+				//System.out.println(input+"<-moved down");
+				}
+			
+			//if current isn't bigger than focus, move to the next
+			//list item
+			focus = input.get(k+1);
+			//System.out.println("focus2 = "+focus);
+			}
+					
 			//break out of while loop when the list is done
 			if(sorted) {
-				System.out.println("done");
+				//System.out.println("done");
 				break;
 			}
 			
 			N = N-1;
-			System.out.println("u done fucked up");
 		}
+	}
+	/*
+	 * Cut the input list in half, sort the two halves seperately,
+	 * then merge them together into one big sorted list.
+	 * 
+	 * Had help from: drozdek, and geeksforgeeks.com
+	 * https://www.geeksforgeeks.org/merge-sort/
+	 */
+	public static void mergeSort(List<Integer> input) {
+		
+		//split the input list into two sub-arrays
+		ArrayList<Integer> L1 = new ArrayList<>();
+		ArrayList<Integer> L2 = new ArrayList<>();
+		
+		int n = input.size();
+		int o = n/2;
+
+		for (int i = 0; i<n; i++) {
+			if (i<= o) {
+				L1.add(input.get(i));
+			} else {
+				L2.add(input.get(i));	
+			}
+	
+		}
+		
+		//find sizes of two subarrays to be merged
+		int n1 = L1.size();
+		int n2 = L2.size();
+		
+		//create temporary arrays to funnel the subs into
+		int L[] = new int [n1];
+		int R[] = new int [n2];
+		
+		//copy arrays into new ones
+		for (int i=0; i<n1; i++) {
+			L[i] = input.get(0+i);
+		}
+		
+		for (int j=0; j<n2; j++) {
+			R[j] = input.get(n1 + j);
+		}
+		
+		/*sort the sub arrays into new lists*/
+		
+		//L
+		ArrayList<Integer> Ls = new ArrayList<>(L.length);
+		for (int l = 0; l < L.length; l++) {
+			Ls.add(0);
+		}
+		
+		for (int i = 0; i < L.length; i++) {
+			if (L[i] > Ls.get(Ls.size()-i-1)) {
+				Ls.set(Ls.size()-i-1, L[i]);
+			}
+		}
+		
+		//R
+		ArrayList<Integer> Rs = new ArrayList<>(R.length);
+		for (int l = 0; l < R.length; l++) {
+			Rs.add(0);
+		}
+		
+		for (int i = 0; i < R.length; i++) {
+			if (R[i] > Rs.get(Rs.size()-i-1)) {
+				Rs.set(R.length-i-1, R[i]);
+			}
+		}
+		
+		//merge the arrays!!
+		
+		int i = 0;
+		int j = 0;
+		int length = input.size();
+		
+		ArrayList<Integer> ordered = new ArrayList<>();
+		for (int c = 0; c<length; c++) {
+			ordered.add(0);
+		}
+		
+		//Loop through both sorted arrays, 
+		//adding their data to the new list
+		int k = 0;
+		while (i < n1 && j < n2) {
+			if(Ls.get(i) <= Rs.get(j)) {
+				ordered.set(k, Ls.get(i));
+				i++;
+			} else {
+				ordered.set(k, Rs.get(j));
+				j++;
+			}
+			
+			k++;
+		}
+		
+		while (i < n1) {
+			ordered.set(k, Ls.get(i));
+			i++;
+			k++;
+		}
+		
+		while (j < n2) {
+			ordered.set(k, Rs.get(j));
+			j++;
+			k++;
+		}
+		
+		//overwright the original list with the new sorted merged list
+		for (int f = 0; f < ordered.size(); f++) {
+			input.set(f, ordered.get(f));
+		}
+
 	}
 }
