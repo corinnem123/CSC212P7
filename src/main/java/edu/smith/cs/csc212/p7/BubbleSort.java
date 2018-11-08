@@ -87,54 +87,58 @@ public class BubbleSort {
 	 * https://www.geeksforgeeks.org/insertion-sort/
 	 */
 	public static void insertionSort(List<Integer> input) {
-		/*
-		 * Why does it replace everything with 88???
-		 */
-		
+		System.out.println("input = "+input);
 		int N = input.size();
-		ArrayList<Integer> ordered = new ArrayList<Integer>(input.size());
-		//System.out.println(ordered);
 		
 		while(true) {
 			boolean sorted = true;
 			
-			for (int i=1; i<N; i++) {
-				/*int j = i;
-				
-				Comparable<Integer> tmp = (Comparable)input.get(i);
-				for (j = i; j > 0 && tmp.compareTo(input.get(j-1))<0; j--)
-						input.set(j, input.get(j-1));
-				tmp = input.get(j);
-				System.out.println(input+"<- modified");
-			}*/
-			
 			//check each item one at a time starting with the first item
-			int focus = input.get(i);
-			int k = i-1;
-			int current = input.get(k);
+			for (int i=1; i<N; i++) {
 			
-			//System.out.println("focus = "+focus);
-			
-			//set up a loop for all the items before it
-			while (k >= 0 && current > focus) {
-				//System.out.println("current = "+current);
+				int focus = input.get(i);
+				int k = i-1;
+				int current = input.get(k);
 				
-				//if the thing you're evaluating =/= the thing you're comparing to,
-				//do something
-				input.set(k+1, current);
-				k --;
-				//System.out.println(input+"<-moved down");
-				}
-			
-			//if current isn't bigger than focus, move to the next
-			//list item
-			focus = input.get(k+1);
-			//System.out.println("focus2 = "+focus);
-			}
+				
+				/*
+				 * set up a loop for all the items before it
+				 * compare the focus to the thing behind it
+				 * if the focus smaller, move it down one position
+				 */
+				if (k >= 0 && current > focus) {
+					current = input.get(k);
 					
-			//break out of while loop when the list is done
+					//if the thing behind focus is larger, pull it out
+					//and move the focus up one position
+					int temp = current;
+					input.set(k, focus);
+					input.set(i, temp);
+					
+					/*
+					 * check to see if the focus is smaller
+					 * than the new thing before it.
+					 * if yes, move it down until it's behind a
+					 * value smaller than focus, or it's at the
+					 * front of the list. 
+					 */
+					
+					while (k > 0 && input.get(k-1) > focus) {
+						int temp2 = input.get(k-1);
+						input.set(k-1, focus);
+						input.set(k, temp2);
+						k--;
+					}
+					k --;
+					}
+			
+				//if current isn't bigger than focus, move to the next
+				//list item
+				focus = input.get(k+1);
+				}
+					
+			//break out of while loop when the list is sorted
 			if(sorted) {
-				//System.out.println("done");
 				break;
 			}
 			
@@ -254,7 +258,7 @@ public class BubbleSort {
 
 	}
 
-	public static void recursiveMergeSort(List<Integer> input, Integer p, Integer r) {
+	/*public static void recursiveMergeSort(List<Integer> input, Integer p, Integer r) {
 		
 		//take input
 		//if input.size() > 2, /2 until it's just two
@@ -281,7 +285,7 @@ public class BubbleSort {
 		} /*else if (p == r) {
 			//this means it's sorted! There's one thing its done its good
 			return;
-			}*/
+			}
 		}
 
 
@@ -342,7 +346,7 @@ public class BubbleSort {
 		for (int c = 0; c<length; c++) {
 			ordered.add(0);
 		}*/
-		
+		/*
 		//Loop through both sorted arrays, 
 		//adding their data to the new list
 		int k = p;
@@ -354,7 +358,7 @@ public class BubbleSort {
 				ordered.set(k, Rs.get(j));
 				j++;
 			}*/
-			
+			/*
 			if(L[i] <= R[j]) {
 				input.set(k, L[i]);
 			} else {
@@ -378,7 +382,7 @@ public class BubbleSort {
 			j++;
 			k++;
 		}
-		
+		*/
 		//overwright the original list with the new sorted merged list
 		/*System.out.println("ordered = "+ordered);
 		for (int f = 0; f < ordered.size(); f++) {
@@ -386,5 +390,5 @@ public class BubbleSort {
 			System.out.println("input = "+input);
 		}*/
 
-	}
+	//}
 }

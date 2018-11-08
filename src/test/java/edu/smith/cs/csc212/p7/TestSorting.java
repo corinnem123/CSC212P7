@@ -84,7 +84,7 @@ public class TestSorting {
 		Assert.assertTrue(checkSorted(sortMe));
 	}
 	
-	@Test
+	/*@Test
 	public void testRecursiveMergeSort() {
 		ArrayList<Integer> sortMe = new ArrayList<>();
 		for (int y : data) {
@@ -92,6 +92,6 @@ public class TestSorting {
 		}
 		BubbleSort.recursiveMergeSort(sortMe, 0, sortMe.get(sortMe.size()-1));
 		Assert.assertTrue(checkSorted(sortMe));
-	}
+	}*/
 
 }
