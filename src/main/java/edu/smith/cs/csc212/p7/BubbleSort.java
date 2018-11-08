@@ -253,4 +253,138 @@ public class BubbleSort {
 		}
 
 	}
+
+	public static void recursiveMergeSort(List<Integer> input, Integer p, Integer r) {
+		
+		//take input
+		//if input.size() > 2, /2 until it's just two
+		//if input.size() == 2, compare the two and swap as necessary
+		//if input.size < 2, already sorted
+		
+		System.out.println(input);
+		System.out.println("p = "+p);
+		System.out.println("r = "+r);
+		//if p<r, there are at least 2 items in the list
+		if (p < r) {
+			
+			System.out.println("did it"+p+", "+r);
+			
+			//find the midpoint, split the list along it, and try again
+			int q = p+r/2;
+			System.out.println("q = "+q);
+			recursiveMergeSort(input,p,q);
+			recursiveMergeSort(input,q+1,r);
+			
+			//merge sorted halves
+			recursiveMergeCall(input,p,q,r);
+			
+		} /*else if (p == r) {
+			//this means it's sorted! There's one thing its done its good
+			return;
+			}*/
+		}
+
+
+	public static void recursiveMergeCall(List<Integer> input, int p, int q, int r) {
+		
+		//find sizes of two subarrays to be merged
+		int n1 = q - p + 1;
+		int n2 = r - q;
+		
+		//create temporary arrays to funnel the subs into
+		int L[] = new int [n1];
+		int R[] = new int [n2];
+		
+		//copy arrays into new ones
+		for (int i=0; i<n1; i++) {
+			L[i] = input.get(p+i);
+		}
+		
+		for (int j=0; j<n2; j++) {
+			R[j] = input.get(q + j + 1);
+		}
+		/*sort the sub arrays into new lists*/
+		/*
+		//L
+		ArrayList<Integer> Ls = new ArrayList<>(L.length);
+		for (int l = 0; l < L.length; l++) {
+			Ls.add(0);
+		}
+		
+		for (int i = 0; i < L.length; i++) {
+			if (L[i] > Ls.get(Ls.size()-i-1)) {
+				Ls.set(Ls.size()-i-1, L[i]);
+			}
+		}
+		
+		System.out.println("Ls = "+Ls);
+		
+		//R
+		ArrayList<Integer> Rs = new ArrayList<>(R.length);
+		for (int l = 0; l < R.length; l++) {
+			Rs.add(0);
+		}
+		
+		for (int i = 0; i < R.length; i++) {
+			if (R[i] > Rs.get(Rs.size()-i-1)) {
+				Rs.set(R.length-i-1, R[i]);
+			}
+		}
+		System.out.println("Rs = "+Rs);*/
+		
+		//merge the arrays!!
+		
+		int i = 0;
+		int j = 0;
+		/*int length = Ls.size() + Rs.size();
+ 		
+		ArrayList<Integer> ordered = new ArrayList<>();
+		for (int c = 0; c<length; c++) {
+			ordered.add(0);
+		}*/
+		
+		//Loop through both sorted arrays, 
+		//adding their data to the new list
+		int k = p;
+		while (i < n1 && j < n2) {
+			/*if(Ls.get(i) <= Rs.get(j)) {
+				ordered.set(k, Ls.get(i));
+				i++;
+			} else {
+				ordered.set(k, Rs.get(j));
+				j++;
+			}*/
+			
+			if(L[i] <= R[j]) {
+				input.set(k, L[i]);
+			} else {
+				input.set(k, R[j]);
+				j++;
+			}
+			
+			k++;
+		}
+		//System.out.println("ordered1 = "+ordered);
+		while (i < n1) {
+			//ordered.set(k, Ls.get(i));
+			input.set(k, L[i]);
+			i++;
+			k++;
+		}
+		
+		while (j < n2) {
+			//ordered.set(k, Rs.get(j));
+			input.set(k, R[j]);
+			j++;
+			k++;
+		}
+		
+		//overwright the original list with the new sorted merged list
+		/*System.out.println("ordered = "+ordered);
+		for (int f = 0; f < ordered.size(); f++) {
+			input.set(f, ordered.get(f));
+			System.out.println("input = "+input);
+		}*/
+
+	}
 }
