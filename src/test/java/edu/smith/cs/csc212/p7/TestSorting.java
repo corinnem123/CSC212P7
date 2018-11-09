@@ -58,9 +58,7 @@ public class TestSorting {
 	@Test
 	public void testSelectionSort() {
 		ArrayList<Integer> sortMe = new ArrayList<>();
-		for (int y : data) {
-			sortMe.add(y);
-		}
+		sortMe.addAll(Arrays.asList(35, 88, 11, 47, 14, 24, 41, 62, 27));
 		BubbleSort.selectionSort(sortMe);
 		Assert.assertTrue(checkSorted(sortMe));	
 	}
@@ -76,9 +74,7 @@ public class TestSorting {
 	@Test
 	public void testMergeSort() {
 		ArrayList<Integer> sortMe = new ArrayList<>();
-		for (int y : data) {
-			sortMe.add(y);
-		}
+		sortMe.addAll(Arrays.asList(35, 88, 11, 47, 14, 24, 41, 62, 27));
 		BubbleSort.mergeSort(sortMe);
 		Assert.assertTrue(checkSorted(sortMe));
 	}
