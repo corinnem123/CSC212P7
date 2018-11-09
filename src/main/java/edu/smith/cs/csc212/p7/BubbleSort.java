@@ -61,7 +61,6 @@ public class BubbleSort {
 			boolean sorted = true;
 			//check each item one at a time starting with the first item
 			for (int i=0; i<N-1; i++) {
-				System.out.println("start with: "+input);
 				
 				//loop through the rest of the list after the current item,
 				//looking for a smaller value
@@ -80,14 +79,11 @@ public class BubbleSort {
 					if (i != index) {
 						swap(input, index, i);
 					}
-					
-					System.out.println("end with: "+input);
 				}
 			}
 				
 			//break out of while loop when the list is done
 			if(sorted) {
-				System.out.println("Final (selection): "+input);
 				break;
 			}
 		}
@@ -272,23 +268,23 @@ public class BubbleSort {
 			boolean sorted = true;
 					
 			//check each item one at a time starting with the first item
-			for (int i=0; i<N-1; i++) {
+			for (int i=0; i<M-1; i++) {
 				//loop through the rest of the list after the current item,
 				//looking for a smaller value
-				for (int j = i+1; j<N; j++) {
+				for (int j = i+1; j<M; j++) {
 							
 					//initialize the index of the smallest value
 					int index = i;
 							
 					//if you find a smaller value, change index
-					if (Ls.get(j) < Ls.get(index)) {
+					if (Rs.get(j) < Rs.get(index)) {
 						index = j;
 					}
 							
 					//if you've found a value that's actually smaller than the
 					//current minimum, swap their placement
 					if (i != index) {
-						swap(Ls, index, i);
+						swap(Rs, index, i);
 					}
 				}
 			}
@@ -341,7 +337,6 @@ public class BubbleSort {
 		for (int f = 0; f < ordered.size(); f++) {
 			input.set(f, ordered.get(f));
 		}
-
 	}
 
 	/*
@@ -369,7 +364,7 @@ public class BubbleSort {
 		recursiveMergeSort(Two);
 		
 		//merge sort the split lists back into a bigger, better, sorted list
-		recursiveMergeCall2(One, Two);
+		recursiveMergeCall(One, Two);
 	}
 
 	/*
@@ -379,7 +374,7 @@ public class BubbleSort {
 	 * I mostly just copy-pasted my mergeSort but also got help from Barb in lab
 	 * who suggested I just pass a version of mergeSort two lists
 	 */
-	public static void recursiveMergeCall2(List<Integer> input, List<Integer> input2) {
+	public static ArrayList<Integer> recursiveMergeCall(List<Integer> input, List<Integer> input2) {
 		
 		//find sizes of two subarrays to be merged
 		int n1 = input.size();
@@ -526,5 +521,76 @@ public class BubbleSort {
 			j++;
 			k++;
 		}
+		
+		
+		//overwright the original lists with the new sorted merged list
+		//java's still throwing an assertion error even though 
+		//ordered (the merged list), input, and input2 (the passed lists)
+		//are all sorted ¯\_(ツ)_/¯
+		input.clear();
+		input2.clear();
+		for (int f = 0; f < ordered.size(); f++) {
+			input.add(ordered.get(f));
+		}
+		
+		for (int f = 0; f < ordered.size(); f++) {
+			input2.add(ordered.get(f));
+		}
+		
+		return ordered;
+	}
+	
+	/*
+	 * Takes a list passed into it and breaks it into individual values,
+	 * which are then each stored as a list in a list of lists.
+	 * The method then iterates over the list of lists, combining and sorting
+	 * the first two values until it's a list of one giant, sorted list.
+	 * 
+	 * Gonna be honest, I completely winged this one
+	 */
+	public static void iterativeMergeSort(List<Integer> input) {
+		
+		//build a list of lists containing the original passed in values
+		ArrayList<ArrayList<Integer>> working = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i<input.size(); i++) {
+			ArrayList<Integer> a = new ArrayList<>();
+			a.add(input.get(i));
+			working.add(a);
+		}
+		
+		//start merging and sorting
+		while (true) {
+			boolean sorted = true;
+			for (int j = 0; j<2; j++) {
+				
+				//get the first two lists, and merge and sort them
+				if (working.size() > 2) {
+						ArrayList<Integer> boi = recursiveMergeCall(working.get(j), working.get(j+1));
+						working.add(boi);
+						
+						//remove j twice because of reasons I guess
+						working.remove(j);
+						working.remove(j);
+						sorted = false;
+				}
+			}
+			
+			//when the list is sorted, stop trying to sort it
+			if (sorted) {
+				break;
+			}
+			
+			//if there aren't enough values to merge, don't try to merge them
+			if (working.size() == 2) {
+				break;
+			}
+		}
+		
+		//when the for loop stops working because there's only two values
+		//merge and sort them here
+		ArrayList<Integer> pls = recursiveMergeCall(working.get(0),working.get(1));
+		working.add(pls);
+		working.remove(0);
+		working.remove(0);
 	}
 }
